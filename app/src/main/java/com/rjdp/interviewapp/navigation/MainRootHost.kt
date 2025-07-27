@@ -6,57 +6,28 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import androidx.navigation.navigation
+import com.rjdp.interviewapp.ui.screens.auth.LogInScreen
+import com.rjdp.interviewapp.ui.screens.auth.SignUpScreen
 import com.rjdp.interviewapp.ui.screens.auth.WelcomeScreen
+import com.rjdp.interviewapp.ui.screens.main.HomeScreen
 
+
+// Main Navigation Root Host
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
-    val user = FirebaseAuth.getInstance().currentUser
+//    val user = FirebaseAuth.getInstance().currentUser
     NavHost(
         navController = navController,
-        startDestination = if (user != null) SubRoots.Auth else SubRoots.Home
+        startDestination = SubRoot.Auth
+        //startDestination = if (user == null) SubRoot.Auth else SubRoot.Home
     ) {
-        navigation<SubRoots.Auth>(startDestination = AuthRoots.WelcomeScreen) {
+        // Define the Auth graph
+        authGraph(navController)
 
-            composable<AuthRoots.WelcomeScreen> {
-                // Welcome Screen
-                WelcomeScreen(
-                    onSignUpClick = { navController.navigate(AuthRoots.SignUp) },
-                    onLogInClick = { navController.navigate(AuthRoots.LogIn) }
-                )
-            }
+        //Define the Home graph
+        homeGraph(navController)
 
-            composable<AuthRoots.SignUp> {
-                // Sign Up Screen
-            }
-
-            composable<AuthRoots.LogIn> {
-                // Log In Screen
-            }
-
-            composable<AuthRoots.ForgotPassword> {
-                // Forgot Password Screen
-            }
-        }
-
-        navigation<SubRoots.Home>(startDestination = HomeRoots.Home) {
-
-            composable<HomeRoots.Home> {
-                // Home Screen
-            }
-
-            composable<HomeRoots.Profile> {
-                // Profile Screen
-            }
-
-            composable<HomeRoots.Settings> {
-                // Settings Screen
-            }
-
-            composable<HomeRoots.Interview> {
-                // Interview Screen
-            }
-        }
 
     }
 }

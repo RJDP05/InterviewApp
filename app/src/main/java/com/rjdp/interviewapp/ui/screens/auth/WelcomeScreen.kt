@@ -1,4 +1,4 @@
-package com.rjdp.interviewapp.ui.screens
+package com.rjdp.interviewapp.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -57,9 +57,7 @@ fun WelcomeScreen(
         Spacer(modifier = Modifier.height(26.dp))
         // Sign Up Button
         Button(
-            onClick = {
-            //onSignInClick(email, password)
-                onSignUpClick },
+            onClick = { onSignUpClick() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
@@ -84,10 +82,7 @@ fun WelcomeScreen(
         }
         // Log In Button
         Button(
-            onClick = {
-            //onSignInClick(email, password)
-                onLogInClick
-            },
+            onClick = { onLogInClick() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)

@@ -1,5 +1,6 @@
 package com.rjdp.interviewapp.ui.screens.main
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 fun HomeScreen(
     onLogout: () -> Unit
 ){
-    val navController = rememberNavController()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,8 +58,12 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ){
-
+            Button(onClick = onLogout) {
+                Text("LOG OUT")
+            }
         }
     }
 }

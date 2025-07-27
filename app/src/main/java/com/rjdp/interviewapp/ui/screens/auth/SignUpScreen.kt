@@ -44,6 +44,7 @@ import com.rjdp.interviewapp.R
 
 @Composable
 fun SignUpScreen(
+    modifier: Modifier = Modifier,
 //    onSignInClick: (String, String) -> Unit = {},
     onSignUpSuccess: () -> Unit
 ) { val context = LocalContext.current
@@ -103,12 +104,12 @@ fun SignUpScreen(
 
         // Sign In Button
         Button(
-            onClick = { //onSignInClick(email, password)
-                FirebaseAuth.getInstance()
-                    .createUserWithEmailAndPassword(email, password)
-                    .addOnSuccessListener { onSignUpSuccess() }
-                    .addOnFailureListener { Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()}
-                      },
+            onClick = {onSignUpSuccess()},
+//                { FirebaseAuth.getInstance()
+//                    .createUserWithEmailAndPassword(email, password)
+//                    .addOnSuccessListener { onSignUpSuccess() }
+//                    .addOnFailureListener { Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()}
+//                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)

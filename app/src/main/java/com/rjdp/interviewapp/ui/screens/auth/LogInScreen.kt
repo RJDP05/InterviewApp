@@ -122,12 +122,12 @@ fun LogInScreen(
 
         // Sign In Button
         Button(
-            onClick = {
-                FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener { onLogInSuccess() }
-                    .addOnFailureListener { Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show() }
-            },
+            onClick = {onLogInSuccess()},
+//                { FirebaseAuth.getInstance()
+//                    .signInWithEmailAndPassword(email, password)
+//                    .addOnSuccessListener { onLogInSuccess() }
+//                    .addOnFailureListener { Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show() }
+//            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
