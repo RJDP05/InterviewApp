@@ -47,7 +47,8 @@ import com.rjdp.interviewapp.R
 
 @Composable
 fun LogInScreen(
-    onLogInSuccess: () -> Unit
+    onLogInSuccess: () -> Unit,
+    onForgotPassword:() -> Unit
 //    navController: NavController,
 //    onGoogleSignInClick: () -> Unit = {},
 //    onForgotPasswordClick: () -> Unit = {}
@@ -110,13 +111,14 @@ fun LogInScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, bottom = 10.dp),
-            contentAlignment = Alignment.CenterEnd
+            contentAlignment = Alignment.CenterEnd,
+
         ) {
             Text(
                 text = "Forgot password?",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 14.sp,
-                //modifier = Modifier.clickable { navController.navigate("fp_screen") }
+                modifier = Modifier.clickable { onForgotPassword() }
             )
         }
 

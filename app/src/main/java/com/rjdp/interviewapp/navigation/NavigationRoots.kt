@@ -1,96 +1,86 @@
 package com.rjdp.interviewapp.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Assistant
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Assistant
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 
-sealed interface SubRoot{
+@Serializable
+sealed class Screen {
 
     @Serializable
-    data object Auth : SubRoot
+    object AuthRoot : Screen()
 
     @Serializable
-    data object Home : SubRoot
+    sealed class Auth : Screen() {
 
+        @Serializable
+        object Welcome : Auth()
+
+        @Serializable
+        object SignUp : Auth()
+
+        @Serializable
+        object LogIn : Auth()
+
+        @Serializable
+        object ForgotPassword : Auth()
+    }
+
+    @Serializable
+    object HomeRoot : Screen()
+
+    @Serializable
+    sealed class Home : Screen() {
+
+        @Serializable
+        object Main : Home()
+
+        @Serializable
+        object Interview : Home()
+
+        @Serializable
+        object Settings : Home()
+    }
 }
 
-sealed interface AuthRoot {
+@Serializable
+sealed class BottomNavigationItems<T>(
+    val name: String,
+    val route: T,
+    @Contextual
+    val unSelectedIcon: ImageVector,
+    @Contextual
+    val selectedIcon: ImageVector // filled icon when selected
+     // unfilled icon when not selected
+) {
 
-    @Serializable
-    data object WelcomeScreen : AuthRoot
+    data object Home : BottomNavigationItems<Screen.Home>(
+        name = "Home",
+        route = Screen.Home.Main,
+        unSelectedIcon = Icons.Outlined.Home,
+        selectedIcon = Icons.Filled.Home,
+    )
 
-    @Serializable
-    data object SignUpScreen : AuthRoot
+    data object Interview : BottomNavigationItems<Screen.Home>(
+        name = "Interview",
+        route = Screen.Home.Interview,
+        unSelectedIcon = Icons.Outlined.Assistant,
+        selectedIcon = Icons.Filled.Assistant,
+    )
 
-    @Serializable
-    data object LogInScreen : AuthRoot
-
-    @Serializable
-    data object ForgotPasswordScreen : AuthRoot
+    data object Settings : BottomNavigationItems<Screen.Home>(
+        name = "Settings",
+        route = Screen.Home.Settings,
+        unSelectedIcon = Icons.Outlined.Settings,
+        selectedIcon = Icons.Filled.Settings,
+    )
 
 }
-
-sealed interface HomeRoot {
-
-    @Serializable
-    data object HomeScreen : HomeRoot
-
-    @Serializable
-    data object ProfileScreen : HomeRoot
-
-    @Serializable
-    data object SettingsScreen : HomeRoot
-
-    @Serializable
-    data object InterviewScreen : HomeRoot
-
-}
-
-//@Serializable
-//sealed interface SettingsRoots {
-//
-//    @Serializable
-//    data object Settings : SettingsRoots
-//
-//    @Serializable
-//    data object ChangePassword : SettingsRoots
-//
-//    @Serializable
-//    data object ChangePhoneNumber : SettingsRoots
-//
-//    @Serializable
-//    data object DeleteAccount : SettingsRoots
-//
-//}
-
-//@Serializable
-//sealed interface InterviewRoots {
-//
-//    @Serializable
-//    data object Interview : InterviewRoots
-//
-//    @Serializable
-//    data object CreateInterview : InterviewRoots
-//
-//    @Serializable
-//    data object EditInterview : InterviewRoots
-//
-//    @Serializable
-//    data object ViewInterview : InterviewRoots
-//}
-//
-//@Serializable
-//sealed interface ProfileRoots {
-//
-//    @Serializable
-//    data object Profile : ProfileRoots
-//
-//    @Serializable
-//    data object EditProfile : ProfileRoots
-//
-//    @Serializable
-//    data object ViewProfile : ProfileRoots
-//
-//    @Serializable
-//    data object ChangePassword : ProfileRoots
-//
-//}

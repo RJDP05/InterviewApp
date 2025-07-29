@@ -7,10 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-
 @Composable
-fun InterviewScreen() {
+fun ProfileScreen(id: Int ) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Interview Screen")
+        Text("Profile Screen")
     }
 }
