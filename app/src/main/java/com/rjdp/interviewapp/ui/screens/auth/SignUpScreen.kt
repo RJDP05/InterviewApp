@@ -44,7 +44,6 @@ import com.rjdp.interviewapp.R
 
 @Composable
 fun SignUpScreen(
-    modifier: Modifier = Modifier,
 //    onSignInClick: (String, String) -> Unit = {},
     onSignUpSuccess: () -> Unit
 ) { val context = LocalContext.current

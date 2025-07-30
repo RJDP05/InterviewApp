@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onLogout: () -> Unit
+//    onLogout: () -> Unit
 ){
     Scaffold(
         topBar = {
@@ -56,7 +56,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            Button(onClick = onLogout) {
+            Button({}) {
                 Text("LOG OUT")
             }
         }

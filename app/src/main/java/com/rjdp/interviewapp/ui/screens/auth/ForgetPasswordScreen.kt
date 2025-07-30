@@ -29,9 +29,7 @@ import androidx.navigation.NavController
 import com.rjdp.interviewapp.R
 
 @Composable
-fun ForgetPasswordScreen(
-    navController: NavController
-) {
+fun ForgetPasswordScreen() {
     var email by remember { mutableStateOf("") }
 
     Column(
