@@ -37,10 +37,8 @@ import com.rjdp.interviewapp.R
 
 @Composable
 fun ForgetPasswordScreen(
-    viewModel: AuthViewModel = viewModel(),
-    onDone: () -> Unit,
+    onResetClick: (String) -> Unit
 ) {
-    val authState by viewModel.authState.collectAsState()
     var email by remember { mutableStateOf("") }
 
     Column(
@@ -76,25 +74,26 @@ fun ForgetPasswordScreen(
         // Sign In Button
         Button(
             onClick = {
-            viewModel.sendPasswordReset(email.trim())
+                onResetClick(email.trim())
             },
-            enabled = authState !is AuthState.Loading,
+//            enabled = authState !is AuthState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            if (authState is AuthState.Loading) {
-                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
-            } else {
-                Text("CONTINUE")
-            }
+            Text("CONTINUE", fontWeight = FontWeight.Bold)
+//            if (authState is AuthState.Loading) {
+//                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+//            } else {
+//                Text("CONTINUE")
+//            }
         }
     }
 
-    LaunchedEffect(authState) {
-        if (authState is AuthState.Unauthenticated) {
-            // Assuming viewModel resets to Unauthenticated on success
-            onDone()
-        }
-    }
+//    LaunchedEffect(authState) {
+//        if (authState is AuthState.Unauthenticated) {
+//            // Assuming viewModel resets to Unauthenticated on success
+//            onDone()
+//        }
+//    }
 }

@@ -16,23 +16,27 @@ sealed class BottomNavItem(
     val unselectedIcon: ImageVector
 ) {
     object Home : BottomNavItem(
-        route = "home",
+        route = Routes.HOME,
         title = "Home",
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home
     )
-    
     object Interview : BottomNavItem(
-        route = "interview",
+        route = Routes.INTERVIEW,
         title = "Interview",
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person
     )
-    
     object Settings : BottomNavItem(
-        route = "settings",
+        route = Routes.SETTINGS,
         title = "Settings",
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Outlined.Settings
     )
-} 
+}
+
+val bottomNavItems = listOf(
+    BottomNavItem.Home,
+    BottomNavItem.Interview,
+    BottomNavItem.Settings
+)

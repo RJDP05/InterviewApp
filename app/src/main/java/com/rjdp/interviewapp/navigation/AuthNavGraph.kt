@@ -4,40 +4,45 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.rjdp.interviewapp.AuthViewModel
 import com.rjdp.interviewapp.ui.screens.auth.ForgetPasswordScreen
 import com.rjdp.interviewapp.ui.screens.auth.LogInScreen
 import com.rjdp.interviewapp.ui.screens.auth.SignUpScreen
 import com.rjdp.interviewapp.ui.screens.auth.WelcomeScreen
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
-    navigation(startDestination = Screen.Welcome.route, route = Screen.AuthGraph.route) {
-        composable(Screen.Welcome.route) {
+fun NavGraphBuilder.authNavGraph(navController: NavHostController, authViewModel: AuthViewModel) {
+
+    navigation(
+        startDestination = Routes.WELCOME,
+        route = Routes.AUTH_ROOT
+    ) {
+        composable(Routes.WELCOME) {
             WelcomeScreen(
-                onLogInClick = { navController.navigate(Screen.Login.route) },
-                onSignUpClick = { navController.navigate(Screen.SignUp.route) }
+                onLogInClick = { navController.navigate(Routes.LOGIN) },
+                onSignUpClick = { navController.navigate(Routes.SIGNUP)}
             )
         }
-        composable(Screen.Login.route) {
+        composable(Routes.LOGIN) {
             LogInScreen(
-                onLoginSuccess = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.AuthGraph.route) { inclusive = true }
-                    }
+                onLoginClick = { email, password ->
+                    authViewModel.logIn(email, password)
                 },
-                onForgotPassword = {
-                    navController.navigate(Screen.ForgotPassword.route)
+                onForgotPasswordClick = {
+                    navController.navigate(Routes.FORGOT_PASSWORD)
                 }
             )
         }
-        composable(Screen.SignUp.route) {
-            SignUpScreen(onSignUpSuccess = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.AuthGraph.route) { inclusive = true }
+        composable(Routes.SIGNUP) {
+            SignUpScreen(
+                onSignUpClick = { email, password ->
+                    authViewModel.signUp(email, password)
                 }
-            })
+            )
         }
-        composable(Screen.ForgotPassword.route) {
-            ForgetPasswordScreen(onDone = { navController.popBackStack(Screen.Login.route, false) })
+        composable(Routes.FORGOT_PASSWORD) {
+            ForgetPasswordScreen(onResetClick = { email ->
+                authViewModel.resetPassword(email)
+            })
         }
     }
 }

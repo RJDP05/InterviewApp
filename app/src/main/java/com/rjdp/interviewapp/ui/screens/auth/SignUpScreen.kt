@@ -50,20 +50,17 @@ import androidx.navigation.NavHostController
 import com.rjdp.interviewapp.AuthState
 import com.rjdp.interviewapp.AuthViewModel
 import com.rjdp.interviewapp.R
-import com.rjdp.interviewapp.navigation.Screen
+
 
 @Composable
 fun SignUpScreen(
-    viewModel: AuthViewModel = viewModel(),
-    onSignUpSuccess: () -> Unit,
+    onSignUpClick: (String, String) -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
-    val authState by viewModel.authState.collectAsState()
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -131,30 +128,31 @@ fun SignUpScreen(
         // Sign In Button
         Button(
             onClick = {
-                if (password == confirmPassword) {
-                    viewModel.signUp(email.trim(), password)
-                } else {
-                    viewModel.setError("Passwords do not match")
-                }
+                onSignUpClick(email.trim(), password)
+//                if (password == confirmPassword) {
+//                    onSignUpClick(email, password)
+//                }
             },
+//            enabled = password == confirmPassword && password.isNotEmpty(),
             modifier = Modifier.fillMaxWidth().height(48.dp),
-            enabled = authState !is AuthState.Loading
+//            enabled = authState !is AuthState.Loading
         ) {
-            if (authState is AuthState.Loading) {
-                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
-            } else {
-                Text("CREATE ACCOUNT")
-            }
+            Text("CREATE ACCOUNT", fontWeight = FontWeight.Bold)
+//            if (authState is AuthState.Loading) {
+//                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+//            } else {
+//                Text("CREATE ACCOUNT")
+//            }
         }
 
         Spacer(Modifier.height(8.dp))
 
-        if (authState is AuthState.Error) {
-            Text(
-                text = (authState as AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error
-            )
-        }
+//        if (authState is AuthState.Error) {
+//            Text(
+//                text = (authState as AuthState.Error).message,
+//                color = MaterialTheme.colorScheme.error
+//            )
+//        }
 
         // Or divider
         Row(
@@ -190,9 +188,9 @@ fun SignUpScreen(
         }
     }
 
-    LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
-            onSignUpSuccess()
-        }
-    }
+//    LaunchedEffect(authState) {
+//        if (authState is AuthState.Authenticated) {
+//            onSignUpSuccess()
+//        }
+//    }
 }

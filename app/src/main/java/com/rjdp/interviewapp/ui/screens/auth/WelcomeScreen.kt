@@ -62,7 +62,7 @@ fun WelcomeScreen(
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            Text("CREATE AN ACCOUNT")
+            Text("CREATE AN ACCOUNT", fontWeight = FontWeight.Bold)
         }
 
         // Or divider
@@ -87,7 +87,7 @@ fun WelcomeScreen(
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            Text("ALREADY HAVE AN ACCOUNT")
+            Text("ALREADY HAVE AN ACCOUNT", fontWeight = FontWeight.Bold)
         }
     }
 }

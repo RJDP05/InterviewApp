@@ -1,81 +1,71 @@
 package com.rjdp.interviewapp.ui.screens.main
 
-import android.R.attr.padding
+import android.R.attr.fontWeight
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-
 import com.rjdp.interviewapp.DoubleBackToExitApp
-import com.rjdp.interviewapp.navigation.BottomNavItem
-import com.rjdp.interviewapp.navigation.Screen
-import com.rjdp.interviewapp.navigation.mainNavGraph
+import com.rjdp.interviewapp.navigation.bottomNavItems
 import kotlin.collections.forEach
-import kotlin.sequences.any
 
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
+fun MainScreenWithBottomNav(
+    currentRoute: String,
+    onNavigate: (String) -> Unit,
+    onSignOut: () -> Unit,
+    content: @Composable () -> Unit
+) {
     DoubleBackToExitApp()
     Scaffold(
         bottomBar = {
-            BottomNavigation(navController = navController)
-        }
-    ) { innerPadding ->
-        Box(Modifier.padding(innerPadding)) {
-            NavHost(navController, startDestination = Screen.Home.route) {
-                mainNavGraph(navController)
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ) {
+                bottomNavItems.forEach { item ->
+                    val isSelected = currentRoute == item.route
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = item.title,
+//                                style = if (isSelected) {
+//                                    fontWeight = FontWeight.Bold
+//                                } else {
+//                                    MaterialTheme.typography.caption
+//                                }
+                            )
+                        },
+                        selected = isSelected,
+                        onClick = {
+                            if (!isSelected) {
+                                onNavigate(item.route)
+                            }
+                        }
+                    )
+                }
             }
         }
-    }
-}
-
-@Composable
-fun BottomNavigation(navController: NavHostController) {
-    val items = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Interview,
-        BottomNavItem.Settings
-    )
-    
-    NavigationBar {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        val currentRoute = currentDestination?.route
-        
-        items.forEach { item ->
-            NavigationBarItem(
-                icon = { Icon( imageVector = (if (item.route == currentRoute) item.selectedIcon else item.unselectedIcon)!!, contentDescription = item.title) },
-                label = { Text(item.title) },
-                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                onClick = {
-                    if (item.route == currentRoute) {
-                        navController.popBackStack(route = item.route, inclusive = false)
-                    } else {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                }
-            )
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            content()
         }
     }
 }

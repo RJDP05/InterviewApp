@@ -5,46 +5,56 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.rjdp.interviewapp.AuthState
+import com.rjdp.interviewapp.AuthStateHandler
 import com.rjdp.interviewapp.AuthViewModel
 
 
 @Composable
-fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = viewModel()) {
-
+fun AppNavigation(authViewModel: AuthViewModel) {
+    val navController = rememberNavController()
     val authState by authViewModel.authState.collectAsState()
 
-    NavHost(navController, startDestination = "router") {
-        composable("router") {
-            RouterScreen(authState = authState, navController = navController)
+
+    AuthStateHandler(
+        authState = authState,
+        onRetry = { /* Implement retry logic if needed */ }
+    ) {
+        // Listen to auth state changes and navigate accordingly
+        LaunchedEffect(authState) {
+            when (authState) {
+                is AuthState.Authenticated -> {
+                    navController.navigate(Routes.MAIN_ROOT) {
+                        popUpTo(0) { inclusive = true } // Clear entire backstack
+                        launchSingleTop = true
+                    }
+                }
+                is AuthState.Unauthenticated -> {
+                    navController.navigate(Routes.AUTH_ROOT) {
+                        popUpTo(0) { inclusive = true } // Clear entire backstack
+                        launchSingleTop = true
+                    }
+                }
+                else -> { /* Loading state handled by AuthStateHandler */ }
+            }
         }
-        authNavGraph(navController)
-        mainNavGraph(navController)
+
+        NavHost(
+            navController = navController,
+            startDestination = when (authState) {
+                is AuthState.Authenticated -> Routes.MAIN_ROOT
+                is AuthState.Unauthenticated -> Routes.AUTH_ROOT
+                else -> Routes.AUTH_ROOT // Default to auth while loading
+            }
+        ) {
+            // Auth navigation graph
+            authNavGraph(navController, authViewModel)
+
+            // Main navigation graph
+            mainNavGraph(navController, authViewModel)
+        }
     }
 }
 
-@Composable
-fun RouterScreen(
-    authState: AuthState,
-    navController: NavHostController
-) {
-    val current by navController.currentBackStackEntryAsState()
-    val currentRoute = current?.destination?.route
-
-    LaunchedEffect(authState, currentRoute) {
-        if (authState == AuthState.Authenticated && currentRoute != Screen.Home.route) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo("router") { inclusive = true }
-            }
-        } else if (authState == AuthState.Unauthenticated && currentRoute != Screen.Welcome.route) {
-            navController.navigate(Screen.Welcome.route) {
-                popUpTo("router") { inclusive = true }
-            }
-        }
-    }
-}

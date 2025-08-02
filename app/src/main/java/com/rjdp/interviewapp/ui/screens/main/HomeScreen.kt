@@ -2,6 +2,7 @@ package com.rjdp.interviewapp.ui.screens.main
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,73 +34,78 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.rjdp.interviewapp.AuthState
 import com.rjdp.interviewapp.AuthViewModel
-import com.rjdp.interviewapp.navigation.Screen
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: AuthViewModel = viewModel(),
-    onSignOut: () -> Unit
 ){
-    val authState by viewModel.authState.collectAsState()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {Text(text = "Hello,\n name")},
-                navigationIcon = {
-                    IconButton(onClick = { /* Navigate */ }) {
-                    Icon(
-                        imageVector = Icons.Filled.AccountBox,
-                        contentDescription = "Person Image"
-                    )
-                }},
-                actions = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Notifications,
-                            contentDescription = "Notifications"
-                        )
-                    }
-                }
-            )
-        }
-    ){
-        innerPadding ->
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            Button(
-                onClick = {viewModel.signOut()}
-            )
-            {
-                if (authState is AuthState.Loading) {
-                    CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
-                } else {
-                    Text("LOG OUT")
-                }
-            }
-            when (authState) {
-                is AuthState.Error -> Text(
-                    (authState as AuthState.Error).message,
-                    color = MaterialTheme.colorScheme.error
-                )
-                else -> {}
-            }
-
-        }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Home Screen",
+            style = MaterialTheme.typography.headlineLarge
+        )
     }
-
-    LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
-            onSignOut()
-        }
-    }
+//    Scaffold(
+//        topBar = {
+//            TopAppBar(
+//                title = {Text(text = "Hello,\n name")},
+//                navigationIcon = {
+//                    IconButton(onClick = { /* Navigate */ }) {
+//                    Icon(
+//                        imageVector = Icons.Filled.AccountBox,
+//                        contentDescription = "Person Image"
+//                    )
+//                }},
+//                actions = {
+//                    IconButton(onClick = { /* do something */ }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Notifications,
+//                            contentDescription = "Notifications"
+//                        )
+//                    }
+//                }
+//            )
+//        }
+//    ){
+//        innerPadding ->
+//        Column (
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(innerPadding)
+//                .padding(16.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center
+//        ){
+//            Button(
+//                onClick = {viewModel.signOut()}
+//            )
+//            {
+//                if (authState is AuthState.Loading) {
+//                    CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+//                } else {
+//                    Text("LOG OUT")
+//                }
+//            }
+//            when (authState) {
+//                is AuthState.Error -> Text(
+//                    (authState as AuthState.Error).message,
+//                    color = MaterialTheme.colorScheme.error
+//                )
+//                else -> {}
+//            }
+//
+//        }
+//    }
+//
+//    LaunchedEffect(authState) {
+//        if (authState is AuthState.Authenticated) {
+//            onSignOut()
+//        }
+//    }
 }
 
 

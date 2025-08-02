@@ -1,10 +1,8 @@
 package com.rjdp.interviewapp.ui.screens.auth
 
-import android.widget.Toast
+
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,22 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,22 +38,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
-import com.rjdp.interviewapp.AuthState
-import com.rjdp.interviewapp.AuthViewModel
 import com.rjdp.interviewapp.R
-import com.rjdp.interviewapp.navigation.Screen
 
 @Composable
 fun LogInScreen(
-    viewModel: AuthViewModel = viewModel(),
-    onLoginSuccess: () -> Unit,
-    onForgotPassword: () -> Unit
+    onLoginClick: (String, String) -> Unit,
+    onForgotPasswordClick: () -> Unit,
 ){
-    val authState by viewModel.authState.collectAsState()
+
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -116,44 +101,33 @@ fun LogInScreen(
         )
 
         // Forgot Password
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 10.dp),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-            Text(
-                text = "Forgot password?",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 14.sp,
-                modifier = Modifier.clickable {
-                    onForgotPassword()
-                }
-            )
+        TextButton(onClick = onForgotPasswordClick) {
+            Text("Forgot Password?")
         }
 
-        // Sign In Button
+        // Log In Button
         Button(
-            onClick = {viewModel.logIn(email.trim(), password)},
+            onClick = {onLoginClick(email.trim(), password)},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            if (authState is AuthState.Loading) {
-                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
-            } else {
-                Text("LOG IN")
-            }
+            Text("LOG IN", fontWeight = FontWeight.Bold)
+//            if (authState is AuthState.Loading) {
+//                CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+//            } else {
+//                Text("LOG IN")
+//            }
         }
 
-        when (authState) {
-            is AuthState.Error -> Text(
-                (authState as AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error
-            )
-
-            else -> {}
-        }
+//        when (authState) {
+//            is AuthState.Error -> Text(
+//                (authState as AuthState.Error).message,
+//                color = MaterialTheme.colorScheme.error
+//            )
+//
+//            else -> {}
+//        }
 
         // Or divider
         Row(
@@ -189,9 +163,9 @@ fun LogInScreen(
         }
     }
 
-    LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
-            onLoginSuccess()
-        }
-    }
+//    LaunchedEffect(authState) {
+//        if (authState is AuthState.Authenticated) {
+//            onLoginSuccess()
+//        }
+//    }
 }
